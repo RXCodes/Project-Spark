@@ -1,5 +1,5 @@
 // starts the node.js server
-const express = require("express");
+import express from 'express';
 const app = express();
 const port = process.env.PORT || 3001;
 const server = app.listen(port, () => console.log(`Server listening on port ${port}!`));
