@@ -1,11 +1,12 @@
+// ******************************************************************
 // the text channel that logs will be sent to
-import {Guild} from "discord.js";
-
+// you can set this to the channel id of your choice
 const LOGGING_CHANNEL_ID = "1043327765518221332";
 
 // if set to true, the log will also be sent to the channel it originated from
 const SEND_LOG_TO_ORIGINATING_CHANNEL = true;
 
+// ******************************************************************
 import {EmbedBuilder, PermissionsBitField} from "discord.js";
 export const Helper = {
     delete_messages,

@@ -57,7 +57,7 @@ function refresh_message_mapping() {
     }
 }
 
-// as users send messages, track them in client_message_mapping
+// as users send messages, track timestamps in client_last_timestamp
 if (Enforced) {
     console.log("Running Goal: " + GOAL_NAME);
     DiscordClient.on(Discord.Events.MessageCreate, (message) => {
