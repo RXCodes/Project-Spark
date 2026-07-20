@@ -2,14 +2,15 @@
 
 The goal of this project is to better moderate the hyperPad discord server while also providing additional services. The source code of this repository will be kept public for complete transparency and is free to reuse to better serve other Discord servers until further notice.
 
-## Deployment
+## Current Capabilities
 
-I am using the Render cloud service to host this repository.
+Spark has a few **preprogrammed goals** as defined in `discord/goals/`. If a user violates a goal, Spark will take action on the user.
+Currently, Spark can:
 
-See https://render.com/docs/deploy-node-express-app or follow the steps below:
+-   Prevent users from sending too many messages within a short time span.
+-   Stop users from sending similar long messages multiple times.
+-   Roughly calculate the typing speed of a user, and flag those who are typing too fast.
 
-Create a new web service with the following values:
-  * Build Command: `yarn`
-  * Start Command: `node app.js`
+## Future Plans
 
-The web service will be live as soon as the build finishes.
+Spark *may* integrate into hyperPad web services, such as sending messages when a project gets shared or showing new featured projects. More moderation goals will be worked on as the server grows. Potentially, there can be additional miscellaneous features to improve the community experience. 
