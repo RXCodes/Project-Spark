@@ -15,5 +15,7 @@ jobs:
         uses: actions/checkout@v4
       - name: Deploy the app
         uses: digitalocean/app_action/deploy@v2
+        env:
+          DISCORD_TOKEN: secrets.DISCORD_TOKEN
         with:
           token: ${{ secrets.SPARK_TOKEN }}
