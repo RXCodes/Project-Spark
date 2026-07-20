@@ -9,7 +9,7 @@ Currently, Spark can:
 
 -   Prevent users from sending too many messages within a short time span.
 -   Stop users from sending similar long messages multiple times.
--   Roughly calculate the typing speed of a user, and flag those who are typing too fast.
+-   Roughly calculate the typing speed of a user, and flag those who are typing way too fast (spamming).
 
 ## ⭐️ Future Plans
 
