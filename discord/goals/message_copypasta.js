@@ -20,7 +20,7 @@ const MinMessageLength = 20;
 const ThresholdLevenshteinDistance = 10;
 
 // the action to take on a user that violates this goal
-function take_action(member, channel) {
+function take_action(member, channel, message) {
     // delete the offending spam messages
     Helper.delete_messages(client_message_mapping[member.id]);
     client_message_mapping[member.id] = [];
@@ -30,7 +30,8 @@ function take_action(member, channel) {
 
     // log this action
     let user_mention = "<@" + member.id + ">";
-    let log = Helper.create_log("🛑 User Kicked", user_mention + " sent the same repetitive message multiple times.", Colors.red, member);
+    let contents = "**Content:**\n```" + message.content + "```";
+    let log = Helper.create_log("🛑 User Kicked", user_mention + " sent the same repetitive message multiple times.\n\n" + contents, Colors.red, member);
     Helper.send_log(log, member.guild, channel);
 }
 
@@ -74,7 +75,7 @@ if (Enforced) {
                 similar = true;
                 content_marker.similar_messages.push(message);
                 if (content_marker.similar_messages.length >= ThresholdTimes) {
-                    take_action(message.member, message.channel);
+                    take_action(message.member, message.channel, message);
                     break;
                 }
             }

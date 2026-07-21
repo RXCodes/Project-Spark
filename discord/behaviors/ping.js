@@ -21,6 +21,7 @@ const PONG_RETURN_NORMAL_TIME = 60 * 20;
 // ******************************************************************
 
 import { DiscordClient } from "../../foundation/discord_bot.js";
+import { HomoglyphMapHelper } from "../homoglyph_map.js";
 import Discord from "discord.js";
 import levenshtein from 'fast-levenshtein';
 const BEHAVIOR_NAME = "Ping";
@@ -81,7 +82,7 @@ if (Enabled) {
         if (message.author.bot) {
             return;
         }
-        let filtered_message = message.content.toLowerCase().trim();
+        let filtered_message = HomoglyphMapHelper.normalize_text(message.content);
         if (filtered_message.includes("pong")) {
             return;
         }

@@ -7,12 +7,15 @@
   "author": "Render Developers",
   "license": "MIT",
   "private": false,
+  "type": "module",
   "scripts": {
     "start": "node app.js"
   },
   "dependencies": {
     "discord.js": "^14.27.0",
     "express": "^5.0.0",
-    "fast-levenshtein": "^3.0.0"
+    "fast-levenshtein": "^3.0.0",
+    "parallelizer-function": "^1.0.0",
+    "rita": "^2.8.31"
   }
 }
