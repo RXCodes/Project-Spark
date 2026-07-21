@@ -13,11 +13,13 @@ function setup_filters(filters) {
 }
 
 async function ingest_message(message) {
+    // normalize the text for analysis
+    let normalized_message = HomoglyphMapHelper.normalize_text(message.content);
+
+    // go through all filters
     for (const filter_properties of Filters) {
         const filter_list = filter_properties.list;
         for (const blocked_word of filter_list) {
-            // normalize the text for analysis
-            let normalized_message = HomoglyphMapHelper.normalize_text(message.content);
 
             // basic check for blocked words in the entire message
             let stripped_message = normalized_message.replace(/[^a-zA-Z0-9]/g, "");
@@ -27,7 +29,8 @@ async function ingest_message(message) {
                     parentPort.postMessage({
                         result: 'detected',
                         filter: filter_properties,
-                        message: message
+                        message: message,
+                        word: blocked_word
                     });
                     return;
                 }
@@ -38,7 +41,8 @@ async function ingest_message(message) {
                 parentPort.postMessage({
                     result: 'detected',
                     filter: filter_properties,
-                    message: message
+                    message: message,
+                    word: blocked_word
                 });
                 return;
             }

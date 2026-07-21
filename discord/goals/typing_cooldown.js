@@ -61,6 +61,9 @@ function refresh_message_mapping() {
 if (Enforced) {
     console.log("Running Goal: " + GOAL_NAME);
     DiscordClient.on(Discord.Events.MessageCreate, (message) => {
+        if (message.author.bot) {
+            return;
+        }
         if (Helper.is_member_admin(message.member)) {
             return;
         }
@@ -90,7 +93,9 @@ if (Enforced) {
             let client_flags = client_flags_mapping[message.author.id] || [];
             client_flags.push(Date.now());
             if (client_flags.length >= ThresholdFlags) {
-                take_action(message.member, message.channel);
+                try {
+                    take_action(message.member, message.channel);
+                } catch (e) {}
             }
             client_flags_mapping[message.author.id] = client_flags;
         }

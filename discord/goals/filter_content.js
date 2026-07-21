@@ -71,6 +71,9 @@ if (Enforced) {
         filters: Filters
     });
     DiscordClient.on(Discord.Events.MessageCreate, (message) => {
+        if (message.author.bot) {
+            return;
+        }
         if (Helper.is_member_admin(message.member)) {
             return;
         }
@@ -83,7 +86,10 @@ if (Enforced) {
 
     worker.on("message", (message) => {
         if (message.result == "detected") {
-            take_action(pending_messages[message.message.id], message.filter);
+            console.log("Filter Detected Term: ", message.word);
+            try {
+                take_action(pending_messages[message.message.id], message.filter);
+            } catch (e) {}
         }
         delete pending_messages[message.message.id];
     });

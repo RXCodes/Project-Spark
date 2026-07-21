@@ -24,10 +24,16 @@ function tokens_are_similar(source_token, search_token) {
         return false;
     }
 
-    // if the phone prefixes match, they're definitely the same word
+    // if the phones match, they're definitely the same word
     let source_phones = RiTa.phones(source_token, { silent: true });
     let search_phones = RiTa.phones(search_token, { silent: true });
-    if (source_phones.startsWith(search_phones)) {
+    if (search_phones.length < 3) {
+        return false;
+    }
+    if (search_phones == source_phones) {
+        return true;
+    }
+    if (source_phones.length >= 10 && search_phones.startsWith(source_phones)) {
         return true;
     }
 
@@ -46,7 +52,7 @@ function tokens_are_similar(source_token, search_token) {
     search_syllables = search_syllables.replace("iy-eh-r", "er");
     search_syllables = search_syllables.replace("uw-uw-", "uw-");
     search_syllables = search_syllables.replace("iy-n", "eh-n");
-    return search_syllables.startsWith(source_phones);
+    return search_syllables == source_phones;
 }
 
 // asynchronously determine if a text contains a subtext

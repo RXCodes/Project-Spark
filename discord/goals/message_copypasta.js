@@ -60,6 +60,9 @@ class ContentMarker {
 if (Enforced) {
     console.log("Running Goal: " + GOAL_NAME);
     DiscordClient.on(Discord.Events.MessageCreate, (message) => {
+        if (message.author.bot) {
+            return;
+        }
         if (message.content.length < MinMessageLength) {
             return;
         }
@@ -75,7 +78,9 @@ if (Enforced) {
                 similar = true;
                 content_marker.similar_messages.push(message);
                 if (content_marker.similar_messages.length >= ThresholdTimes) {
-                    take_action(message.member, message.channel, message);
+                    try {
+                        take_action(message.member, message.channel, message);
+                    } catch (e) {}
                     break;
                 }
             }
