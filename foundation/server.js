@@ -5,3 +5,4 @@ const port = process.env.PORT || 3001;
 const server = app.listen(port, () => console.log(`Server listening on port ${port}!`));
 server.keepAliveTimeout = 120 * 1000;
 server.headersTimeout = 120 * 1000;
+export const Server = server;
