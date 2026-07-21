@@ -22,13 +22,15 @@ async function ingest_message(message) {
             // basic check for blocked words in the entire message
             let stripped_message = normalized_message.replace(/[^a-zA-Z0-9]/g, "");
             let stripped_blocked_word = blocked_word.replace(/[^a-zA-Z0-9]/g, "");
-            if (stripped_message.startsWith(stripped_blocked_word)) {
-                parentPort.postMessage({
-                    result: 'detected',
-                    filter: filter_properties,
-                    message: message
-                });
-                return;
+            if (stripped_message.length > 0 && stripped_blocked_word.length > 0) {
+                if (stripped_message.startsWith(stripped_blocked_word)) {
+                    parentPort.postMessage({
+                        result: 'detected',
+                        filter: filter_properties,
+                        message: message
+                    });
+                    return;
+                }
             }
 
             // advanced check for blocked words token-wise
