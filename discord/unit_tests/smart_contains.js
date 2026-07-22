@@ -28,4 +28,12 @@ if (!SmartContains.contains("wow screw youu!", "screw you")) {
     throw "FAIL: 'screw you' not detected in 'wow screwww youu!'";
 }
 
+if (!SmartContains.contains("cl!p", "clip")) {
+    throw "FAIL: 'cl!p' and 'clip' are not similar";
+}
+
+if (!SmartContains.contains("this is a cl!p", "clip")) {
+    throw "FAIL: 'clip' not contained in 'this is a cl!p'";
+}
+
 console.log("Smart Contains Unit Tests Passed!");

@@ -76,7 +76,24 @@ function contains(normalized_text, subtext) {
         let match_found = true;
         for (let j = 0; j < source_tokens.length; j++) {
             let target_token = tokens[i + j];
-            if (!tokens_are_similar(source_tokens[j], target_token)) {
+
+            // remove all punctuation from the token and test
+            let target_clean = target_token.replace(/[^a-zA-Z0-9]/g, "");
+            let similar_clean = false;
+            if (tokens_are_similar(source_tokens[j], target_clean)) {
+                similar_clean = true;
+            }
+
+            // replace ! with i and test
+            let target_i = target_token.replace("!", "i");
+            target_i = target_i.replace(/[^a-zA-Z0-9]/g, "");
+            let similar_i = false;
+            if (tokens_are_similar(source_tokens[j], target_i)) {
+                similar_i = true;
+            }
+
+            // break if match_found is set to false
+            if (!similar_i && !similar_clean) {
                 match_found = false;
                 break;
             }
