@@ -37,7 +37,6 @@ function take_action(member, channel, message) {
 
 // ******************************************************************
 
-import { DiscordClient } from "../../foundation/discord_bot.js";
 import { Colors, Helper } from "../helpers.js";
 import levenshtein from 'fast-levenshtein';
 import { DiscordInteractionRouter } from "../interaction_router.js";

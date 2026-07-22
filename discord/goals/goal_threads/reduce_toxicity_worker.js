@@ -10,7 +10,7 @@ parentPort.on('message', (message) => {
     const threshold_dictionary = message.thresholds;
 
     // process the message through the model
-    toxicity.load().then(model => {
+    toxicity.load(0, []).then(model => {
         model.classify([normalized_message]).then(predictions => {
             predictions.forEach(prediction => {
                 let probability = prediction.results[0].probabilities[1];

@@ -47,7 +47,7 @@ function take_action(message, filter) {
     // log this action
     let user_mention = "<@" + member.id + ">";
     let contents = "**Content:**\n```" + message.content + "```";
-    var description = filter.logDescription;
+    let description = filter.logDescription;
     description = description.replace("[@USER]", user_mention);
     let log = Helper.create_log(filter.logTitle, description + "\n\n" + contents, filter.color, member);
     Helper.send_log(log, member.guild, message.channel);
@@ -59,7 +59,7 @@ import { DiscordInteractionRouter } from "../interaction_router.js";
 import { Colors, Helper } from "../helpers.js";
 import { Worker } from 'worker_threads';
 const GOAL_NAME = "Filter Content";
-var pending_messages = {};
+const pending_messages = {};
 
 // as users send messages, asynchronously process them to find any blocked words and phrases
 if (Enforced) {

@@ -3,7 +3,7 @@ import { parentPort } from 'worker_threads';
 import { SmartContains } from "../../smart_contains.js";
 import { HomoglyphMapHelper } from "../../homoglyph_map.js";
 
-var Filters = [];
+let Filters = [];
 
 function setup_filters(filters) {
     Filters = [];

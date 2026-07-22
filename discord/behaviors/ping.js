@@ -22,7 +22,6 @@ const PONG_RETURN_NORMAL_TIME = 60 * 20;
 
 import { HomoglyphMapHelper } from "../homoglyph_map.js";
 import { DiscordInteractionRouter } from "../interaction_router.js";
-import Discord from "discord.js";
 import levenshtein from 'fast-levenshtein';
 const BEHAVIOR_NAME = "Ping";
 const funny_messages = [
@@ -46,7 +45,7 @@ const funny_messages = [
     "🏓🏓🏓"
 ];
 
-var pong_responses = 0;
+let pong_responses = 0;
 function pong(message) {
     pong_responses += 1;
     if (!DiscordInteractionRouter.request_action_on_message(message)) {
@@ -71,8 +70,7 @@ function pong(message) {
         return;
     }
     if (pong_responses >= PONG_RESPONSE_TIMES) {
-        let index = Math.random() * (funny_messages.length - 1);
-        index = Math.floor(Math.random() * (funny_messages.length - 1));
+        let index = Math.floor(Math.random() * (funny_messages.length - 1));
         message.channel.send(funny_messages[index]);
         return;
     }

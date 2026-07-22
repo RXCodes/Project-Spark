@@ -1,6 +1,4 @@
 // intelligently check if a text contains a subtext
-import { HomoglyphMapHelper } from "./homoglyph_map.js";
-import { Worker } from 'worker_threads';
 import RiTa from 'rita';
 
 export const SmartContains = {
@@ -12,7 +10,7 @@ export const SmartContains = {
 // source_token is treated as the word to search for
 function tokens_are_similar(source_token, search_token) {
     // check if they're actually the same word
-    if (source_token == search_token) {
+    if (source_token === search_token) {
         return true;
     }
 
@@ -30,7 +28,7 @@ function tokens_are_similar(source_token, search_token) {
     if (search_phones.length < 3) {
         return false;
     }
-    if (search_phones == source_phones) {
+    if (search_phones === source_phones) {
         return true;
     }
     if (source_phones.length >= 10 && search_phones.startsWith(source_phones)) {
@@ -38,8 +36,8 @@ function tokens_are_similar(source_token, search_token) {
     }
 
     // look at the syllables - simplify them if possible
-    var search_syllables = RiTa.syllables(search_token, { silent: true });
-    var new_syllables = [];
+    let search_syllables = RiTa.syllables(search_token, { silent: true });
+    let new_syllables = [];
     let split = search_syllables.split("/");
     for (const s of split) {
         if (s.includes("-")) {
@@ -52,7 +50,7 @@ function tokens_are_similar(source_token, search_token) {
     search_syllables = search_syllables.replace("iy-eh-r", "er");
     search_syllables = search_syllables.replace("uw-uw-", "uw-");
     search_syllables = search_syllables.replace("iy-n", "eh-n");
-    return search_syllables == source_phones;
+    return search_syllables === source_phones;
 }
 
 // asynchronously determine if a text contains a subtext
@@ -67,7 +65,7 @@ function contains(normalized_text, subtext) {
 
     // check if the tokens match
     for (let i = 0; i < tokens.length - (source_tokens.length - 1); i++) {
-        var match_found = true;
+        let match_found = true;
         for (let j = 0; j < source_tokens.length; j++) {
             let target_token = tokens[i + j];
             if (!tokens_are_similar(source_tokens[j], target_token)) {

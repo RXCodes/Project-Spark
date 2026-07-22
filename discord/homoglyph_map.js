@@ -30,7 +30,7 @@ const Collection = {
 };
 
 export const Map = {};
-var Glyph_Count = 0;
+let Glyph_Count = 0;
 for (const [character, list] of Object.entries(Collection)) {
     for (const from of list) {
         Map[from] = character;

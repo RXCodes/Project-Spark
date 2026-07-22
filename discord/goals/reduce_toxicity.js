@@ -3,8 +3,6 @@
 // uses a lightweight language model to determine message toxicity
 
 // whether this goal is enforced or not - set false to disable
-import {Worker} from "worker_threads";
-
 const Enforced = true;
 
 // the minimum toxicity scores needed to take an action (range: 0-1)
@@ -104,8 +102,9 @@ function take_action(member, channel, message, offense) {
 
 import { DiscordInteractionRouter } from "../interaction_router.js";
 import { Colors, Helper } from "../helpers.js";
+import { Worker } from "worker_threads";
 const GOAL_NAME = "Reduce Toxicity";
-var pending_messages = {};
+const pending_messages = {};
 
 // as users send messages, track them in client_message_mapping
 if (Enforced) {
