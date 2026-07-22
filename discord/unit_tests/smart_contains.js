@@ -36,4 +36,8 @@ if (!SmartContains.contains("this is a cl!p", "clip")) {
     throw "FAIL: 'clip' not contained in 'this is a cl!p'";
 }
 
-console.log("Smart Contains Unit Tests Passed!");
+if (SmartContains.contains("tyty", "titty")) {
+    throw "FAIL: 'tyty' and 'titty' are similar";
+}
+
+console.log("Smart Contains Unit Tests Pass!");
