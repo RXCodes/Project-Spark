@@ -94,4 +94,8 @@ if (Enforced) {
         }
         delete pending_messages[message.message_id];
     });
+
+    DiscordInteractionRouter.register_message_chain_event(2, (messages, member) => {
+
+    });
 }

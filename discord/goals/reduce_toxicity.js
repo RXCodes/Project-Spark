@@ -153,4 +153,8 @@ if (Enforced) {
             }
         }
     });
+
+    DiscordInteractionRouter.register_message_chain_event(2, (messages, member) => {
+
+    });
 }
