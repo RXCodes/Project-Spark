@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@tensorflow-models/toxicity": "^1.0.3",
-    "@tensorflow/tfjs": "^4.22.0",
+    "@tensorflow/tfjs": "^1.1.0",
     "discord.js": "^14.27.0",
     "express": "^5.0.0",
     "fast-levenshtein": "^3.0.0",
