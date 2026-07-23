@@ -20,7 +20,6 @@ const DETECT_PREFIXES = [
     "hey",
     "heya",
     "hiya",
-    "yo",
     "sup",
     "whats up",
     "howdy",
@@ -30,10 +29,7 @@ const DETECT_PREFIXES = [
     "hewwo",
     "henlo",
     "hiya",
-    "oi",
-    "ey",
-    "ay",
-    "yoo",
+    "ay yall",
     "aloha",
     "salutations",
     "bonjour",
@@ -187,6 +183,9 @@ if (Enabled) {
             return;
         }
         if (message.author.bot) {
+            return;
+        }
+        if (on_cooldown) {
             return;
         }
         if (message.content.length > MAX_MESSAGE_LENGTH) {
