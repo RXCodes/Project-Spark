@@ -1,7 +1,7 @@
 // the actual script responsible for handling filtering content
 import { parentPort } from 'worker_threads';
-import { SmartContains } from "../../smart_contains.js";
-import { HomoglyphMapHelper } from "../../homoglyph_map.js";
+import { SmartContains } from "../smart_contains.js";
+import { HomoglyphMapHelper } from "../homoglyph_map.js";
 
 let Filters = [];
 

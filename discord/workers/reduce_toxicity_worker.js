@@ -1,13 +1,23 @@
 import '@tensorflow/tfjs';
 import * as toxicity from '@tensorflow-models/toxicity';
 import { parentPort } from 'worker_threads';
-import { HomoglyphMapHelper } from "../../homoglyph_map.js";
+import { HomoglyphMapHelper } from "../homoglyph_map.js";
 
 parentPort.on('message', (message) => {
     // normalize the message before processing
     const normalized_message = HomoglyphMapHelper.normalize_text(message.contents);
     const prediction_matches = {};
     const threshold_dictionary = message.thresholds;
+
+    // if the message is too short, it will crash - assume it is safe
+    if (normalized_message.length < 5) {
+        parentPort.postMessage({
+            message_id: message.message_id,
+            type: message.type,
+            matches: prediction_matches
+        });
+        return;
+    }
 
     // process the message through the model
     toxicity.load(0, []).then(model => {
@@ -21,7 +31,7 @@ parentPort.on('message', (message) => {
                 message_id: message.message_id,
                 type: message.type,
                 matches: prediction_matches
-            })
+            });
         });
     });
 

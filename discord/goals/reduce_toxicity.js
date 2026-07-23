@@ -138,7 +138,7 @@ const pending_message_chains = {};
 // as users send messages, track them in client_message_mapping
 if (Enforced) {
     console.log("Running Goal: " + GOAL_NAME);
-    const worker = new Worker('./discord/goals/goal_threads/reduce_toxicity_worker.js', {});
+    const worker = new Worker('./discord/workers/reduce_toxicity_worker.js', {});
     DiscordInteractionRouter.register_message_event(2, (message) => {
         if (message.author.bot) {
             return;

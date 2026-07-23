@@ -85,7 +85,7 @@ const pending_message_chains = {};
 // as users send messages, asynchronously process them to find any blocked words and phrases
 if (Enforced) {
     console.log("Running Goal: " + GOAL_NAME);
-    const worker = new Worker('./discord/goals/goal_threads/filter_content_worker.js', {});
+    const worker = new Worker('./discord/workers/filter_content_worker.js', {});
     worker.postMessage({
         type: "setup_filters",
         filters: Filters
