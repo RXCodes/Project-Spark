@@ -5,16 +5,16 @@
 const Enabled = true;
 
 // how long to wait before this behavior can be triggered again (in seconds)
-const BEHAVIOR_COOLDOWN = 240;
+const BEHAVIOR_COOLDOWN = 60;
 
 // the minimum toxicity scores before questioning a message
 const ToxicityThresholds = {
-    "severe_toxicity": 0.6,
-    "threat": 0.6,
-    "obscene": 0.6,
-    "sexual_explicit": 0.6,
-    "identity_attack": 0.7,
-    "insult": 0.7,
+    "severe_toxicity": 0.5,
+    "threat": 0.5,
+    "obscene": 0.5,
+    "sexual_explicit": 0.5,
+    "identity_attack": 0.5,
+    "insult": 0.5,
     "toxicity": 1.0
 };
 
