@@ -12,8 +12,8 @@ const ToxicityThresholds = {
     "obscene": 0.95,
     "sexual_explicit": 0.95,
     "identity_attack": 0.925,
-    "insult": 0.9,
-    "toxicity": 0.89
+    "insult": 0.975,
+    "toxicity": 0.9
 };
 
 // actions to take based on severity of the offense
