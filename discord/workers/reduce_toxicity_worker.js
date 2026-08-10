@@ -1,4 +1,3 @@
-import '@tensorflow/tfjs';
 import * as toxicity from '@tensorflow-models/toxicity';
 import { parentPort } from 'worker_threads';
 import { HomoglyphMapHelper } from "../homoglyph_map.js";
