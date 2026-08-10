@@ -21,24 +21,21 @@ function substitute_keywords(text, keyword_replacements) {
     return output;
 }
 
-parentPort.on('message', (message) => {
-    // normalize the message before processing
-    let normalized_message = HomoglyphMapHelper.normalize_text(message.contents);
-    normalized_message = substitute_keywords(normalized_message, KeywordReplacements);
-    const prediction_matches = {};
-    const threshold_dictionary = message.thresholds;
-
-    // if the message is too short, it will crash - assume it is safe
-    if (normalized_message.length < 5) {
-        parentPort.postMessage({
-            message_id: message.message_id,
-            type: message.type,
-            matches: prediction_matches
-        });
+// process one message at a time to prevent multithreading issues
+let process_queue = [];
+let is_busy = false;
+function process_next_message() {
+    if (is_busy) {
         return;
     }
-
-    // process the message through the model
+    if (process_queue.length == 0) {
+        return;
+    }
+    let message = process_queue.shift();
+    let normalized_message = message.normalized_message;
+    const prediction_matches = {};
+    const threshold_dictionary = message.thresholds;
+    is_busy = true;
     toxicity_model.then(model => {
         model.classify([normalized_message]).then(predictions => {
             predictions.forEach(prediction => {
@@ -51,7 +48,29 @@ parentPort.on('message', (message) => {
                 type: message.type,
                 matches: prediction_matches
             });
+            is_busy = false;
+            process_next_message();
         });
     });
+}
 
+parentPort.on('message', async (message) => {
+    // normalize the message before processing
+    let normalized_message = HomoglyphMapHelper.normalize_text(message.contents);
+    normalized_message = substitute_keywords(normalized_message, KeywordReplacements);
+
+    // if the message is too short, it will crash - assume it is safe
+    if (normalized_message.length < 5) {
+        parentPort.postMessage({
+            message_id: message.message_id,
+            type: message.type,
+            matches: {}
+        });
+        return;
+    }
+
+    // add to the process queue
+    message.normalized_message = normalized_message;
+    process_queue.push(message);
+    process_next_message();
 });
