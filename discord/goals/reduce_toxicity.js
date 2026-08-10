@@ -6,7 +6,7 @@
 const Enforced = true;
 
 // the minimum toxicity scores needed to take an action (range: 0-1)
-const ToxicityThresholds = {
+export const ToxicityThresholds = {
     "severe_toxicity": 0.95,
     "threat": 0.925,
     "obscene": 0.95,

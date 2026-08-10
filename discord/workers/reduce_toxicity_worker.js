@@ -3,9 +3,25 @@ import * as toxicity from '@tensorflow-models/toxicity';
 import { parentPort } from 'worker_threads';
 import { HomoglyphMapHelper } from "../homoglyph_map.js";
 
+// words to replace to prevent false detections
+const KeywordReplacements = {
+    "beast": "guy",
+    "clanker": "bot"
+}
+
+// substitute keywords according to KeywordReplacements
+function substitute_keywords(text, keyword_replacements) {
+    let output = text;
+    for (const [key, value] of Object.entries(keyword_replacements || {})) {
+        output = output.replace(key, value);
+    }
+    return output;
+}
+
 parentPort.on('message', (message) => {
     // normalize the message before processing
-    const normalized_message = HomoglyphMapHelper.normalize_text(message.contents);
+    let normalized_message = HomoglyphMapHelper.normalize_text(message.contents);
+    normalized_message = substitute_keywords(normalized_message, KeywordReplacements);
     const prediction_matches = {};
     const threshold_dictionary = message.thresholds;
 
