@@ -75,6 +75,7 @@ function take_action_on_chain(messages, message_contents, member, filter) {
 // ******************************************************************
 
 import { DiscordInteractionRouter } from "../interaction_router.js";
+import { filter_content_worker } from "../workers/worker_access.js";
 import { Colors, Helper } from "../helpers.js";
 import { Worker } from 'worker_threads';
 import { v4 as uuid4 } from 'uuid';
@@ -85,7 +86,7 @@ const pending_message_chains = {};
 // as users send messages, asynchronously process them to find any blocked words and phrases
 if (Enforced) {
     console.log("Running Goal: " + GOAL_NAME);
-    const worker = new Worker('./discord/workers/filter_content_worker.js', {});
+    const worker = filter_content_worker;
     worker.postMessage({
         type: "setup_filters",
         filters: Filters

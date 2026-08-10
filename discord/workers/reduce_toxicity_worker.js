@@ -9,6 +9,9 @@ const KeywordReplacements = {
     "clanker": "bot"
 }
 
+// the toxicity model - only needs to be loaded once
+const toxicity_model = toxicity.load(0, []);
+
 // substitute keywords according to KeywordReplacements
 function substitute_keywords(text, keyword_replacements) {
     let output = text;
@@ -36,7 +39,7 @@ parentPort.on('message', (message) => {
     }
 
     // process the message through the model
-    toxicity.load(0, []).then(model => {
+    toxicity_model.then(model => {
         model.classify([normalized_message]).then(predictions => {
             predictions.forEach(prediction => {
                 let probability = prediction.results[0].probabilities[1];

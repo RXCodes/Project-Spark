@@ -130,6 +130,7 @@ const QuestionableHelloMessages = [
 // ******************************************************************
 
 import { HomoglyphMapHelper } from "../homoglyph_map.js";
+import { reduce_toxicity_worker } from "../workers/worker_access.js";
 import { DiscordInteractionRouter } from "../interaction_router.js";
 import { SmartContains } from "../smart_contains.js";
 import levenshtein from 'fast-levenshtein';
@@ -177,7 +178,6 @@ function questionablySayHello(channel) {
 
 if (Enabled) {
     console.log("Running Behavior: " + BEHAVIOR_NAME);
-    const reduce_toxicity_worker = new Worker('./discord/workers/reduce_toxicity_worker.js', {});
     DiscordInteractionRouter.register_message_event(100, (message, type) => {
         if (type !== Discord.Events.MessageCreate) {
             return;

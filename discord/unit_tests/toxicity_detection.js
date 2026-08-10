@@ -1,8 +1,9 @@
 import { Worker } from "worker_threads";
-import { v4 as uuid4 } from "uuid";
 const GOAL_NAME = "Reduce Toxicity";
-const worker = new Worker('./Discord/workers/reduce_toxicity_worker.js', {});
 import { ToxicityThresholds } from "../goals/reduce_toxicity.js";
+import Path from "path";
+import { reduce_toxicity_worker } from "../workers/worker_access.js";
+const worker = reduce_toxicity_worker;
 
 // this shouldn't be considered as a harmful message
 worker.postMessage({
@@ -19,6 +20,16 @@ worker.postMessage({
     message_id: "You suck",
     contents: "You suck"
 });
+
+// spam lots of messages to stress test - this shouldn't crash
+for (let i = 0; i < 100; i++) {
+    worker.postMessage({
+        thresholds: ToxicityThresholds,
+        type: "test_stress",
+        message_id: "example",
+        contents: "this is a test"
+    });
+}
 
 worker.on("message", (message) => {
     // all labels from most offensive to least offensive

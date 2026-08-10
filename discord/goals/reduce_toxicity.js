@@ -128,6 +128,7 @@ function take_action_on_chain(messages, message_contents, member, offense) {
 // ******************************************************************
 
 import { DiscordInteractionRouter } from "../interaction_router.js";
+import { reduce_toxicity_worker } from "../workers/worker_access.js";
 import { Colors, Helper } from "../helpers.js";
 import { Worker } from "worker_threads";
 import { v4 as uuid4 } from "uuid";
@@ -138,7 +139,7 @@ const pending_message_chains = {};
 // as users send messages, track them in client_message_mapping
 if (Enforced) {
     console.log("Running Goal: " + GOAL_NAME);
-    const worker = new Worker('./discord/workers/reduce_toxicity_worker.js', {});
+    const worker = reduce_toxicity_worker;
     DiscordInteractionRouter.register_message_event(2, (message) => {
         if (message.author.bot) {
             return;
