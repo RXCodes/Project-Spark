@@ -7,7 +7,7 @@
 const Enabled = true;
 
 // the maximum levenshtein distance to consider the message equivalent to "ping"
-const MAX_LEVENSHTEIN_DISTANCE = 2;
+const MAX_LEVENSHTEIN_DISTANCE = 1;
 
 // how many times to reply with pong before going to special messages
 const PONG_RESPONSE_TIMES = 4;

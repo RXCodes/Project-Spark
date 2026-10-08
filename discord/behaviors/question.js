@@ -9,12 +9,12 @@ const BEHAVIOR_COOLDOWN = 60;
 
 // the minimum toxicity scores before questioning a message
 const ToxicityThresholds = {
-    "severe_toxicity": 0.5,
-    "threat": 0.5,
-    "obscene": 0.5,
-    "sexual_explicit": 0.5,
-    "identity_attack": 0.5,
-    "insult": 0.5,
+    "severe_toxicity": 0.65,
+    "threat": 0.65,
+    "obscene": 0.65,
+    "sexual_explicit": 0.65,
+    "identity_attack": 0.65,
+    "insult": 0.65,
     "toxicity": 1.0
 };
 

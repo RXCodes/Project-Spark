@@ -5,10 +5,10 @@
 const Enabled = true;
 
 // the maximum levenshtein distance to consider the message equivalent to something else
-const MAX_LEVENSHTEIN_DISTANCE = 2;
+const MAX_LEVENSHTEIN_DISTANCE = 1;
 
 // the maximum length of a message that the bot should respond to
-const MAX_MESSAGE_LENGTH = 200;
+const MAX_MESSAGE_LENGTH = 20;
 
 // how long to wait before this behavior can be triggered again (in seconds)
 const BEHAVIOR_COOLDOWN = 120;
