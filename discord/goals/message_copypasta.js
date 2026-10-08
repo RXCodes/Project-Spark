@@ -1,12 +1,12 @@
 // ******************************************************************
 // GOAL: don't let user send similar long messages X times
-// 3 long similar messages across 25 messages is considered as spam by default
+// 5 long similar messages across 25 messages is considered as spam by default
 
 // whether this goal is enforced or not - set false to disable
 const Enforced = true;
 
 // how many similar messages that can be sent before taking action
-const ThresholdTimes = 3;
+const ThresholdTimes = 5;
 
 // the number of prior messages to keep track of
 // note that the larger the lookup size, the more demanding this goal can be to achieve

@@ -7,13 +7,13 @@
 const Enforced = true;
 
 // the maximum theoretical typing speed to start taking action
-const ThresholdWPM = 350;
+const ThresholdWPM = 380;
 
 // the time it takes until a flag expires (in seconds)
 const ThresholdTimeRange = 15;
 
 // how many flags needed within the specified time range before taking action
-const ThresholdFlags = 2;
+const ThresholdFlags = 5;
 
 // the amount of time to start deleting messages when taking action (in seconds)
 const ActionDeletionTime = 30;

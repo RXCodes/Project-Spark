@@ -1,12 +1,12 @@
 // ******************************************************************
 // GOAL: don't let user send X messages over Y seconds
-// 6 messages within 8 seconds is considered as spam by default
+// 10 messages within 8 seconds is considered as spam by default
 
 // whether this goal is enforced or not - set false to disable
 const Enforced = true;
 
 // how many messages that can be sent before taking action
-const ThresholdTimes = 6;
+const ThresholdTimes = 10;
 
 // the timeframe that a group of messages (in seconds) is considered spam
 const DecayTime = 8;

@@ -69,7 +69,7 @@ function create_log(title, message, color, member) {
 
 function send_log(embed, guild, originating_channel) {
     try {
-        if (SEND_LOG_TO_ORIGINATING_CHANNEL) {
+        if (SEND_LOG_TO_ORIGINATING_CHANNEL && originating_channel) {
             originating_channel.send({ embeds: [embed] });
         }
         guild.channels.cache.get(LOGGING_CHANNEL_ID).send({ embeds: [embed] });

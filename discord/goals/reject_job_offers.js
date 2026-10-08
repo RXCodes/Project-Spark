@@ -9,7 +9,7 @@ const Enforced = true;
 const MessageLengthThreshold = 250;
 
 // how many flags are raised before taking action
-const FlagThreshold = 6;
+const FlagThreshold = 8;
 
 // flags in the message to look for
 const Flags = [
@@ -347,17 +347,11 @@ const Flags = [
 
 // the action to take on a user that violates this goal
 function take_action(member, channel, message) {
-    // delete the offending spam message
-    message.delete();
-
-    // time out member for 10 minutes
-    Helper.timeout_member(member,60 * 10, "This server is not taking any applicants at the moment, and this is not the place to send applications.");
-
-    // log this action
+    // simply flag this - don't take action
     let user_mention = "<@" + member.id + ">";
     let contents = "**Resume:**\n```" + message.content + "```";
-    let log = Helper.create_log("⛔️ Application Rejected", user_mention + " sent over their resume that nobody cares about.\n\n" + contents, Colors.red, member);
-    Helper.send_log(log, member.guild, channel);
+    let log = Helper.create_log("⛔️ Application Detected", user_mention + " sent over content that potentially looks like a resume.\n\n" + contents, Colors.red, member);
+    Helper.send_log(log, member.guild, null);
 }
 
 // ******************************************************************

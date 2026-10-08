@@ -1,6 +1,7 @@
 // ******************************************************************
 // GOAL: don't let user send toxic messages
 // uses a lightweight language model to determine message toxicity
+// 8 "toxic" messages over 100 seconds will flag an action
 
 // whether this goal is enforced or not - set false to disable
 const Enforced = true;
@@ -16,20 +17,26 @@ export const ToxicityThresholds = {
     "toxicity": 0.9
 };
 
+// how many toxic messages that can be sent before taking action
+const ThresholdTimes = 8;
+
+// the timeframe that a group of messages (in seconds) is considered as toxic
+const DecayTime = 100;
+
 // actions to take based on severity of the offense
 // offenses: "severe_toxicity", "threat", "obscene", "sexual_explicit", "identity_attack", "insult", "toxicity"
 const OffenseActions = {
     "severe_toxicity": {
         timeoutTime: 60 * 60 * 48,
         logTitle: "⚠️ User Timed Out",
-        logDescription: "[@USER] sent a message that was severely toxic. Discrimination and bullying will not be tolerated.",
+        logDescription: "[@USER] sent message(s) that were severely toxic. Discrimination and bullying will not be tolerated.",
         userReason: "You sent a message that was severely toxic. Please follow server rules and be nice to others.",
         color: Colors.warn
     },
     "threat": {
         timeoutTime: 0,
         logTitle: "🛑 Threat Removed",
-        logDescription: "[@USER] sent a threat. Intention to harm or inflict damage to someone will not be tolerated.",
+        logDescription: "[@USER] sent a threat and offensive messages. Intention to harm or inflict damage to someone will not be tolerated.",
         userReason: "You sent a threat in the server.",
         kick: true,
         color: Colors.red
@@ -135,6 +142,27 @@ import { v4 as uuid4 } from "uuid";
 const GOAL_NAME = "Reduce Toxicity";
 const pending_messages = {};
 const pending_message_chains = {};
+const client_toxic_message_mapping = {};
+
+// remove "toxic" messages that are no longer within the decay time
+function refresh_message_mapping() {
+    for (const [key, value] of Object.entries(client_toxic_message_mapping)) {
+        let timestamps = value;
+        timestamps = timestamps.filter(message => Date.now() - message.createdTimestamp <= DecayTime * 1000);
+        client_toxic_message_mapping[key] = timestamps;
+    }
+}
+
+// track toxic messages - if too many are found, action_callback is triggered
+function track_toxic_message(message, action_callback) {
+    let user_messages = client_toxic_message_mapping[message.author.id] || [];
+    user_messages.push(message);
+    client_toxic_message_mapping[message.author.id] = user_messages;
+    if (user_messages.length > ThresholdTimes) {
+        delete client_toxic_message_mapping[message.author.id];
+        action_callback();
+    }
+}
 
 // as users send messages, track them in client_message_mapping
 if (Enforced) {
@@ -195,6 +223,8 @@ if (Enforced) {
             "toxicity"
         ];
 
+        refresh_message_mapping();
+
         if (message.type === "ingest_message") {
             const discord_message = pending_messages[message.message_id];
             delete pending_messages[message.message_id];
@@ -203,7 +233,9 @@ if (Enforced) {
             for (const offensive_label of ranked_offensive_labels) {
                 if (message.matches[offensive_label]) {
                     if (DiscordInteractionRouter.request_action_on_message(discord_message)) {
-                        take_action(discord_message.member, discord_message.channel, discord_message, offensive_label);
+                        track_toxic_message(discord_message, () => {
+                            take_action(discord_message.member, discord_message.channel, discord_message, offensive_label);
+                        });
                     }
                     return;
                 }
@@ -218,7 +250,10 @@ if (Enforced) {
             for (const offensive_label of ranked_offensive_labels) {
                 if (message.matches[offensive_label]) {
                     if (DiscordInteractionRouter.request_action_on_message_chain(chain_data.messages)) {
-                        take_action_on_chain(chain_data.messages, chain_data.full_message, chain_data.member, offensive_label);
+                        // track as one toxic message - use the last one in the chain
+                        track_toxic_message(chain_data.messages.last, () => {
+                            take_action_on_chain(chain_data.messages, chain_data.full_message, chain_data.member, offensive_label);
+                        });
                     }
                     return;
                 }
