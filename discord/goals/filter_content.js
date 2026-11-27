@@ -16,7 +16,7 @@ const Filters = [
     {
         name: "Severe Filter",
         list: SevereFilterList,
-        timeoutTime: 60 * 30,
+        timeoutTime: 60 * 3,
         logTitle: "⚠️ User Timed Out",
         logDescription: "[@USER] sent a message that contained content that violated server rules.",
         userReason: "You sent a message that contained content that violated server rules.",
