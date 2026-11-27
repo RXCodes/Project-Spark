@@ -11,12 +11,19 @@ import { SevereFilterList } from "../filter_lists/Severe.js";
 // list of things that makes a message look like a scam
 import { PotentialScamsFilterList } from "../filter_lists/PotentialScams.js";
 
+// whole words and phrases that should not be filtered.
+// matching is case-insensitive and ignores surrounding punctuation.
+// "small" is listed because the severe entry "s&m" was flagging it.
+const AllowList = [
+    "small"
+];
+
 // list of all filters to use along with their settings
 const Filters = [
     {
         name: "Severe Filter",
         list: SevereFilterList,
-        timeoutTime: 60 * 30,
+        timeoutTime: 60 * 3,
         logTitle: "⚠️ User Timed Out",
         logDescription: "[@USER] sent a message that contained content that violated server rules.",
         userReason: "You sent a message that contained content that violated server rules.",
@@ -89,7 +96,8 @@ if (Enforced) {
     const worker = filter_content_worker;
     worker.postMessage({
         type: "setup_filters",
-        filters: Filters
+        filters: Filters,
+        allowlist: AllowList
     });
     DiscordInteractionRouter.register_message_event(1, (message) => {
         if (message.author.bot) {
