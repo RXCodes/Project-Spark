@@ -1,61 +1,43 @@
 // the actual script responsible for handling filtering content
 import { parentPort } from 'worker_threads';
-import { SmartContains } from "../smart_contains.js";
 import { HomoglyphMapHelper } from "../homoglyph_map.js";
+import { find_blocked_term, prepare_allowlist } from "../filter_match.js";
 
 let Filters = [];
+let AllowList = [];
 
-function setup_filters(filters) {
+function setup_filters(filters, allowlist) {
     Filters = [];
     for (let filter of filters) {
         Filters.push(filter);
     }
+    const normalized_allowlist = [];
+    for (const entry of allowlist || []) {
+        normalized_allowlist.push(HomoglyphMapHelper.normalize_text(String(entry)));
+    }
+    AllowList = prepare_allowlist(normalized_allowlist);
 }
 
 function ingest_message(content, type, id) {
     // normalize the text for analysis
     let normalized_message = HomoglyphMapHelper.normalize_text(content);
-
-    // go through all filters
-    for (const filter_properties of Filters) {
-        const filter_list = filter_properties.list;
-        for (const blocked_word of filter_list) {
-
-            // basic check for blocked words in the entire message
-            let stripped_message = normalized_message.replace(/[^a-zA-Z0-9]/g, "");
-            let stripped_blocked_word = blocked_word.replace(/[^a-zA-Z0-9]/g, "");
-            if (stripped_message.length > 0 && stripped_blocked_word.length > 0) {
-                if (stripped_message.startsWith(stripped_blocked_word)) {
-                    parentPort.postMessage({
-                        result: 'detected',
-                        filter: filter_properties,
-                        message_id: id,
-                        type: type,
-                        word: blocked_word
-                    });
-                    return;
-                }
-            }
-
-            // advanced check for blocked words token-wise
-            if (SmartContains.contains(normalized_message, blocked_word)) {
-                parentPort.postMessage({
-                    result: 'detected',
-                    filter: filter_properties,
-                    message_id: id,
-                    type: type,
-                    word: blocked_word
-                });
-                return;
-            }
-        }
+    const detected = find_blocked_term(normalized_message, Filters, AllowList);
+    if (detected) {
+        parentPort.postMessage({
+            result: 'detected',
+            filter: detected.filter,
+            message_id: id,
+            type: type,
+            word: detected.word
+        });
+        return;
     }
     parentPort.postMessage({ result: 'clear', type: type, message_id: id });
 }
 
 parentPort.on('message', (message) => {
     if (message.type === "setup_filters") {
-        setup_filters(message.filters);
+        setup_filters(message.filters, message.allowlist);
         return;
     }
     if (message.type === "ingest_message") {
